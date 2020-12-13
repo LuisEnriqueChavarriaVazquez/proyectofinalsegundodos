@@ -75,8 +75,6 @@
                         ResultSet rs = pst.executeQuery();
                         if (rs.next()) {
                             out.println("Valid login credentials");
-                            session.setAttribute("email", email);
-                            response.sendRedirect(request.getContextPath() + "/home.jsp");
                             request.getRequestDispatcher("home.jsp").forward(request, response);
                         } else {
             %>
