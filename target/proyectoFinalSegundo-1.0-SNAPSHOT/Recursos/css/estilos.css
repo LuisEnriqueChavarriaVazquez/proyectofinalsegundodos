@@ -37,10 +37,10 @@
 }
 
 /*Para el index*/
+
+
 .justificador {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    width: 100%;
 }
 
 .buttonsMine {
@@ -186,3 +186,19 @@ input[type=number]::-webkit-outer-spin-button {
 .centeredTextTitleTable{
     text-align: center;
 }
+
+/*Card de vizualizacion*/
+
+.containerCardVer{
+    width: 100% !important;
+    padding: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cardVer{
+    width: 80%;
+}
+

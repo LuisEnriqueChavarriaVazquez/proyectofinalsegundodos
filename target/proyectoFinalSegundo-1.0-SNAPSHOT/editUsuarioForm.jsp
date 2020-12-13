@@ -5,92 +5,151 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.*"%>
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenida</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Bienvenida</title>
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="Recursos/css/materialize.css">
-    <link rel="stylesheet" href="Recursos/css/estilos.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="Recursos/css/materialize.css">
+        <link rel="stylesheet" href="Recursos/css/estilos.css">
 
-</head>
+    </head>
 
-<body class="blue-grey darken-2" style="margin-bottom: 200px;">
+    <body class="blue-grey darken-2" style="margin-bottom: 200px;">
+        
+        <script>
+            //index.js  
+            function sendEmail() {
+                Email.send({
+                    Host: "smtp.yourisp.com",
+                    Username: "pruebaescomwad",
+                    Password: "luisenrique",
+                    To: 'luisechvz@gmail.com',
+                    From: "pruebaescomwad@gmail.com",
+                    Subject: "prueba",
+                    Body: "Usuario editado agregada.",
+                }).then(
+                        message => alert("mail sent successfully")
+                );
+            }
+        </script>
 
-    <nav>
-        <div class="nav-wrapper blue-grey darken-4">
-            <ul id="nav-mobile" class="right">
-                <li><a href="badges.html">Volver al inicio.</a></li>
-            </ul>
-        </div>
-    </nav>
+        <nav>
+            <div class="nav-wrapper blue-grey darken-4">
+                <ul id="nav-mobile" class="right">
+                    <li><a href="badges.html">Volver al inicio.</a></li>
+                </ul>
+            </div>
+        </nav>
 
-    <section class="container">
-        <br><br>
-        <h3 class="white-text">Editar usuario.</h3>
-        <div class="mainBox z-depth-4" style="border-radius: 50px;">
-            <div class="titleForm blue-grey darken-4 robotoRegular white-text">Datos de usuario.</div>
-            <div class="formularioUsuario blue-grey darken-3">
-                <div class="row">
-                    <form class="col s12">
-                        <div class="row">
-                            <div class="input-field col s12">
-                                <i class="material-icons prefix white-text">account_circle</i>
-                                <input id="icon_prefix_nombre" type="text" class="white-text" name="nombre">
-                                <label for="icon_prefix_nombre">Nombre(s)</label>
+        <%
+            Connection cnx = null;
+            Statement sta = null;
+            ResultSet rs = null;
+
+            String cod = request.getParameter("cod");
+
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                cnx = DriverManager.getConnection("jdbc:mysql://us-cdbr-east-02.cleardb.com/heroku_ccea1cf4896460c?user=b5a529b56bb57f&password=f2643e0f");
+                sta = cnx.createStatement();
+                rs = sta.executeQuery("select * from usuario where idUsuario = '" + cod + "'");
+
+                while (rs.next()) {
+        %>
+
+        <section class="container">
+            <br><br>
+            <h3 class="white-text">Editar usuario.</h3>
+            <div class="mainBox z-depth-4" style="border-radius: 50px;">
+                <div class="titleForm blue-grey darken-4 robotoRegular white-text">Datos de usuario.</div>
+                <div class="formularioUsuario blue-grey darken-3">
+                    <div class="row">
+                        <form class="col s12">
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix white-text">account_circle</i>
+                                    <input value="<%out.print(rs.getString(2));%>" id="icon_prefix_nombre" type="text" class="white-text" name="nombreUsuario" required>
+                                    <label for="icon_prefix_nombre">Nombre(s)</label>
+                                </div>
+                                <br><br>
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix white-text">looks_one</i>
+                                    <input value="<%out.print(rs.getString(3));%>" id="icon_prefix_paterno" type="text" class="white-text" name="paterno" required>
+                                    <label for="icon_prefix_paterno">Apellido paterno</label>
+                                </div>
+                                <br><br>
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix white-text">looks_two</i>
+                                    <input value="<%out.print(rs.getString(4));%>" id="icon_prefix_materno" type="text" class="white-text" name="materno" required>
+                                    <label for="icon_prefix_materno">Apellido materno</label>
+                                </div>
+                                <br><br>
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix white-text">alternate_email</i>
+                                    <input value="<%out.print(rs.getString(5));%>" id="icon_prefix_email" type="email" class="white-text" name="email" required>
+                                    <label for="icon_prefix_email">Email</label>
+                                </div>
+                                <br><br>
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix white-text">how_to_reg</i>
+                                    <input value="<%out.print(rs.getString(6));%>" id="icon_prefix_alias" type="text" class="white-text" name="alias" required>
+                                    <label for="icon_prefix_alias">Nombre de usuario (alias)</label>
+                                </div>
+                                <br><br>
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix white-text">security</i>
+                                    <input value="<%out.print(rs.getString(7));%>" id="icon_prefix" type="password" class="white-text" name="pass" required>
+                                    <label for="icon_prefix">Password</label>
+                                </div>
+                                <div class="containerEnvioSign">
+                                    <button
+                                        name="btnEditarUsuario"
+                                        class="z-depth-4 btn-large waves-effect waves-teal white btnEnvio text-darken-4 blue-grey-text robotoGrueso"
+                                        type="submit">
+                                        Actualizar.
+                                    </button>
+                                </div>
                             </div>
-                            <br><br>
-                            <div class="input-field col s12">
-                                <i class="material-icons prefix white-text">looks_one</i>
-                                <input id="icon_prefix_paterno" type="text" class="white-text" name="paterno">
-                                <label for="icon_prefix_paterno">Apellido paterno</label>
-                            </div>
-                            <br><br>
-                            <div class="input-field col s12">
-                                <i class="material-icons prefix white-text">looks_two</i>
-                                <input id="icon_prefix_materno" type="text" class="white-text" name="materno">
-                                <label for="icon_prefix_materno">Apellido materno</label>
-                            </div>
-                            <br><br>
-                            <div class="input-field col s12">
-                                <i class="material-icons prefix white-text">how_to_reg</i>
-                                <input id="icon_prefix_alias" type="text" class="white-text" name="alias">
-                                <label for="icon_prefix_alias">Nombre de usuario (alias)</label>
-                            </div>
-                            <br><br>
-                            <div class="input-field col s12">
-                                <i class="material-icons prefix white-text">alternate_email</i>
-                                <input id="icon_prefix_email" type="email" class="white-text" name="email">
-                                <label for="icon_prefix_email">Email</label>
-                            </div>
-                            <br><br>
-                            <div class="input-field col s12">
-                                <i class="material-icons prefix white-text">security</i>
-                                <input id="icon_prefix" type="password" class="white-text" name="name">
-                                <label for="icon_prefix">Password</label>
-                            </div>
-                            <div class="containerEnvioSign">
-                                <button
-                                    class="z-depth-4 btn-large waves-effect waves-teal white btnEnvio text-darken-4 blue-grey-text robotoGrueso"
-                                    type="submit">
-                                    Actualizar.
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
+        <%
+                }
+            } catch (Exception e) {
+                out.print("Fallo" + e);
+            }
 
-</body>
-<script src="js/jquery.js"></script>
-<script src="js/materialize.min.js"></script>
-<script src="js/implementations.js"></script>
+            if (request.getParameter("btnEditarUsuario") != null) {
+                String nombreUsuario = request.getParameter("nombreUsuario");
+                String paterno = request.getParameter("paterno");
+                String materno = request.getParameter("materno");
+                String alias = request.getParameter("alias");
+                String email = request.getParameter("email");
+                String pass = request.getParameter("pass");
+
+                try {
+                    sta.executeUpdate("update usuario set nombre='" + nombreUsuario + "', paterno='" + paterno + "', materno='" + materno + "', email='" + email + "', nombreUsuario='" + alias + "', claveUsuario='" + pass + "' where nombreUsuario = '" + alias + "'");
+                    request.getRequestDispatcher("procesoListo.jsp").forward(request, response);
+                } catch (Exception e) {
+                    out.print(e + " " +cod);
+                }
+            }
+
+        %>
+
+    </body>
+    <script src="Recursos/js/jquery.js"></script>
+        <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <script src="Recursos/js/materialize.min.js"></script>
+    <script src="Recursos/js/implementations.js"></script>
 
 </html>
