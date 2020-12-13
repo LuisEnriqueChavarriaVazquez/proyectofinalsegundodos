@@ -72,7 +72,7 @@
 
                                             try {
                                                 Class.forName("com.mysql.jdbc.Driver");
-                                                cnx = DriverManager.getConnection("jdbc:mysql://localhost/mydb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&user=root&password=root");
+                                                cnx = DriverManager.getConnection("jdbc:mysql://us-cdbr-east-02.cleardb.com/heroku_ccea1cf4896460c?user=b5a529b56bb57f&password=f2643e0f");
                                                 sta = cnx.createStatement();
                                                 key = sta.executeQuery("select * from categoria");
 
