@@ -22,22 +22,6 @@
 
 <body class="blue-grey darken-2">
     
-    <script>
-            //index.js  
-            function sendEmail() {
-                Email.send({
-                    Host: "smtp.yourisp.com",
-                    Username: "pruebaescomwad",
-                    Password: "luisenrique",
-                    To: 'luisechvz@gmail.com',
-                    From: "pruebaescomwad@gmail.com",
-                    Subject: "prueba",
-                    Body: "Producto editado agregada.",
-                }).then(
-                        message => alert("mail sent successfully")
-                );
-            }
-        </script>
 
     <nav>
         <div class="nav-wrapper blue-grey darken-4">
@@ -130,7 +114,7 @@
                 String exist = request.getParameter("productoExistencia");
 
                 try {
-                    sta.executeUpdate("update producto set nombreProducto='" + nombre + "', descripcionProducto='" + desc + "', precio='" + precio + "', existencia='" + exist + "' where nombreProducto = '" + nombre + "'");
+                    sta.executeUpdate("update producto set nombreProducto='" + nombre + "', descripcionProducto='" + desc + "', precio='" + precio + "', existencia='" + exist + "' where idProducto = '" + cod + "'");
                     request.getRequestDispatcher("procesoListo.jsp").forward(request, response);
                 } catch (Exception e) {
                     out.print(e + " " +cod);
