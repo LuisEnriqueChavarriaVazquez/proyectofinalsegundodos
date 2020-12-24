@@ -68,7 +68,7 @@
                         <!--Agrego código para convertir \ en /-->
                                 <script>
                                     var str = "<%out.print(rs.getString(6));%>";
-                                    var res = str.replace("/\\/g", "\\");
+                                    var res = str.replace("/\\/g", "\\");¿
                                 </script>
                         
                         <td class="columnasDespliegue centeredTextTitleTable"><img id="imagenUser" width="50px" src="<%out.print(rs.getString(6));%>"></td>
