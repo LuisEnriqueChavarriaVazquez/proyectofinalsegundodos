@@ -9,7 +9,7 @@
 
     try {
         Class.forName("com.mysql.jdbc.Driver");
-        cnx = DriverManager.getConnection("jdbc:mysql://localhost/mydb?user=root&password=root");
+        cnx = DriverManager.getConnection("jdbc:mysql://localhost/reportes?user=root&password=root");
         sta = cnx.createStatement();
         rs = sta.executeQuery("select * from usuario");
 

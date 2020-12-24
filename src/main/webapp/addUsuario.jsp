@@ -20,30 +20,12 @@
 
     </head>
 
-    <body class="blue-grey darken-2" style="margin-bottom: 200px;">
-        
-        <script>
-            //index.js  
-            function sendEmail() {
-                Email.send({
-                    Host: "smtp.yourisp.com",
-                    Username: "pruebaescomwad",
-                    Password: "luisenrique",
-                    To: 'luisechvz@gmail.com',
-                    From: "pruebaescomwad@gmail.com",
-                    Subject: "prueba",
-                    Body: "Nuevo usuario agregado.",
-                }).then(
-                        message => alert("mail sent successfully")
-                );
-            }
-        </script>
+    <body class="purple darken-2" style="margin-bottom: 200px;">
 
         <nav>
-            <div class="nav-wrapper blue-grey darken-4">
+            <div class="nav-wrapper purple darken-4">
                 <ul id="nav-mobile" class="right">
-                    <li><a href="home.jsp" class="waves-effect waves-light btn"><i class="material-icons left">home</i>Menu de gestión.</a></li>
-                    <li><a href="despliegueUsuarios.jsp" class="waves-effect waves-light btn"><i class="material-icons left">list</i>Despliegue de usuarios.</a></li>
+
                 </ul>
             </div>
         </nav>
@@ -52,8 +34,8 @@
             <br><br>
             <h3 class="white-text">Agregar usuario.</h3>
             <div class="mainBox z-depth-4" style="border-radius: 50px;">
-                <div class="titleForm blue-grey darken-4 robotoRegular white-text">Datos de registro (nuevo usuario)</div>
-                <div class="formularioUsuario blue-grey darken-3">
+                <div class="titleForm purple darken-4 robotoRegular white-text">Datos de registro (nuevo usuario)</div>
+                <div class="formularioUsuario purple darken-3">
                     <div class="row">
                         <form class="col s12">
                             <div class="row">
@@ -75,12 +57,7 @@
                                     <label for="icon_prefix_materno">Apellido materno</label>
                                 </div>
                                 <br><br>
-                                <div class="input-field col s12">
-                                    <i class="material-icons prefix white-text">how_to_reg</i>
-                                    <input id="icon_prefix_alias" type="text" class="white-text" name="alias" required>
-                                    <label for="icon_prefix_alias">Nombre de usuario (alias)</label>
-                                </div>
-                                <br><br>
+
                                 <div class="input-field col s12">
                                     <i class="material-icons prefix white-text">alternate_email</i>
                                     <input id="icon_prefix_email" type="email" class="white-text" name="email" required>
@@ -88,9 +65,21 @@
                                 </div>
                                 <br><br>
                                 <div class="input-field col s12">
-                                    <i class="material-icons prefix white-text">security</i>
-                                    <input id="icon_prefix" type="password" class="white-text" name="pass" required>
-                                    <label for="icon_prefix">Password</label>
+                                    <i class="material-icons prefix white-text">perm_identity</i>
+                                    <input id="icon_prefix_alias" type="text" class="white-text" name="nombreUsuario" required>
+                                    <label for="icon_prefix_alias">Nombre de usuario</label>
+                                </div
+                                <br><br>
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix white-text">photo</i>
+                                    <input id="icon_prefix_foto" type="text" class="white-text" name="fotoUsuario" required>
+                                    <label for="icon_prefix_foto">URL de la foto (online) o ruta del archivo (referencia a la carpeta Recursos/img/nombre.jpg, no uses "\")</label>
+                                </div
+                                <br><br>
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix white-text">how_to_reg</i>
+                                    <input id="icon_prefix_clave" type="password" class="white-text" name="claveUsuario" required>
+                                    <label for="icon_prefix_clave">Clave usuario</label>
                                 </div>
                                 <div class="containerEnvioSign">
                                     <button
@@ -116,13 +105,14 @@
                 String nom = request.getParameter("nombre");
                 String paterno = request.getParameter("materno");
                 String materno = request.getParameter("paterno");
-                String alias = request.getParameter("alias");
                 String email = request.getParameter("email");
-                String pass = request.getParameter("pass");
+                String fotoUsuario = request.getParameter("fotoUsuario");
+                String nombreUsuario = request.getParameter("nombreUsuario");
+                String claveUsuario = request.getParameter("claveUsuario");
 
                 try {
                     Class.forName("com.mysql.jdbc.Driver");
-                    cnx = DriverManager.getConnection("jdbc:mysql://us-cdbr-east-02.cleardb.com/heroku_ccea1cf4896460c?user=b5a529b56bb57f&password=f2643e0f");
+                    cnx = DriverManager.getConnection("jdbc:mysql://localhost/nuevaFotoBase?user=root&password=root");
                     sta = cnx.createStatement();
                     rs = sta.executeQuery("select max(idUsuario)+1 from usuario");
 
@@ -131,8 +121,8 @@
                         idUsuario = rs.getString(1);
                     }
 
-                    sta.executeUpdate("insert into usuario values('" + idUsuario + "','" + nom + "', '" + paterno + "', '" + materno + "', '" + email + "', '" + alias + "', '" + pass + "')");
-                    request.getRequestDispatcher("procesoListo.jsp").forward(request, response);
+                    sta.executeUpdate("insert into usuario values('" + idUsuario + "','" + nom + "', '" + paterno + "', '" + materno + "', '" + email + "', '" + fotoUsuario + "', '" + nombreUsuario + "', '" + claveUsuario + "')");
+
                     sta.close();
                     rs.close();
                     cnx.close();
@@ -146,7 +136,7 @@
 
     </body>
     <script src="Recursos/js/jquery.js"></script>
-        <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
     <script src="Recursos/js/materialize.min.js"></script>
     <script src="Recursos/js/implementations.js"></script>
 

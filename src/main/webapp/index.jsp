@@ -1,6 +1,6 @@
 <%-- 
-    Document   : index
-    Created on : 3/12/2020, 01:10:38 AM
+    Document   : signUp
+    Created on : 3/12/2020, 01:27:31 AM
     Author     : Luis Enrique
 --%>
 
@@ -20,10 +20,10 @@
 
     </head>
 
-    <body class="blue-grey darken-2">
+    <body class="purple darken-2">
 
         <nav>
-            <div class="nav-wrapper blue-grey darken-4">
+            <div class="nav-wrapper purple darken-4">
                 <ul id="nav-mobile" class="right">
                 </ul>
             </div>
@@ -31,37 +31,13 @@
 
         <section class="container">
             <br><br>
-            <h3 class="white-text">Sign up.</h3>
+            <h3 class="white-text">Log in.</h3>
             <div class="mainBox z-depth-4" style="border-radius: 50px;">
-                <div class="titleForm blue-grey darken-4 robotoRegular white-text">Datos de registro</div>
-                <div class="formularioUsuario blue-grey darken-3">
+                <div class="titleForm purple darken-4 robotoRegular white-text">Datos de ingreso al sistema</div>
+                <div class="formularioUsuario purple darken-3">
                     <div class="row">
                         <form class="col s12" method="POST">
                             <div class="row">
-                                <div class="input-field col s12">
-                                    <i class="material-icons prefix white-text">account_circle</i>
-                                    <input id="icon_prefix_nombre" type="text" class="white-text" name="nombreUsuario" required>
-                                    <label for="icon_prefix_nombre">Nombre(s)</label>
-                                </div>
-                                <br><br>
-                                <div class="input-field col s12">
-                                    <i class="material-icons prefix white-text">looks_one</i>
-                                    <input id="icon_prefix_paterno" type="text" class="white-text" name="paternoUsuario" required>
-                                    <label for="icon_prefix_paterno">Apellido paterno</label>
-                                </div>
-                                <br><br>
-                                <div class="input-field col s12">
-                                    <i class="material-icons prefix white-text">looks_two</i>
-                                    <input id="icon_prefix_materno" type="text" class="white-text" name="maternoUsuario" required>
-                                    <label for="icon_prefix_materno">Apellido materno</label>
-                                </div>
-                                <br><br>
-                                <div class="input-field col s12">
-                                    <i class="material-icons prefix white-text">how_to_reg</i>
-                                    <input id="icon_prefix_alias" type="text" class="white-text" name="aliasUsuario" required>
-                                    <label for="icon_prefix_alias">Nombre de usuario (alias)</label>
-                                </div>
-                                <br><br>
                                 <div class="input-field col s12">
                                     <i class="material-icons prefix white-text">alternate_email</i>
                                     <input id="icon_prefix_email" type="email" class="white-text" name="emailUsuario" required>
@@ -70,15 +46,15 @@
                                 <br><br>
                                 <div class="input-field col s12">
                                     <i class="material-icons prefix white-text">security</i>
-                                    <input id="icon_prefix" type="password" class="white-text" name="passUsuario" required>
-                                    <label for="icon_prefix">Password</label>
+                                    <input id="icon_prefix" type="password" class="white-text" name="claveUsuario" required>
+                                    <label for="icon_prefix">Contraseña de usuario</label>
                                 </div>
                                 <div class="containerEnvioSign">
                                     <button
-                                        name="registroUsuarios"
+                                        name="logUsuarios"
                                         class="z-depth-4 btn-large waves-effect waves-teal white btnEnvio text-darken-4 blue-grey-text robotoGrueso"
                                         type="submit" value="Grabar">
-                                        Registrarse.
+                                        Ingresar.
                                     </button>
                                 </div>
                             </div>
@@ -86,46 +62,47 @@
                     </div>
                 </div>
             </div>
-            <div class="more">
-                <a href="logIn.jsp" class="robotoDelgado white-text" style="font-size: 20px; border-bottom: .5px solid #fff;">¿Ya tienes una cuenta?</a>
+            <%
+                if (request.getParameter("logUsuarios") != null) {
+                    try {
+                        String email = request.getParameter("emailUsuario");
+                        String pass = request.getParameter("claveUsuario");
+                        Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
+                        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/nuevaFotoBase?user=root&password=root");
+
+                        PreparedStatement pst = conn.prepareStatement("Select email,idUsuario from usuario where email=? and claveUsuario=?");
+                        pst.setString(1, email);
+                        pst.setString(2, pass);
+                        ResultSet rs = pst.executeQuery();
+                        if (rs.next()) {
+                            out.println("Valid login credentials");
+                            request.getRequestDispatcher("despliegueUsuarios.jsp").forward(request, response);
+                        } else {
+            %>
+
+            <br><br>
+            <div class="row">
+                <div class="col s12 m12">
+                    <div class="card red darken-3">
+                        <div class="card-content white-text">
+                            <span class="card-title">Error!!</span>
+                            <p><%out.println("El email o el ID de usuario están incorrectos.");%></p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </section>
-        
-        <%
-            if (request.getParameter("registroUsuarios") != null) {
-                Connection cnx = null;
-                Statement sta = null;
-                ResultSet rs = null;
 
-                String nom = request.getParameter("nombreUsuario");
-                String paterno = request.getParameter("maternoUsuario");
-                String materno = request.getParameter("paternoUsuario");
-                String alias = request.getParameter("aliasUsuario");
-                String email = request.getParameter("emailUsuario");
-                String pass = request.getParameter("passUsuario");
 
-                try {
-                    Class.forName("com.mysql.jdbc.Driver");
-                    cnx = DriverManager.getConnection("jdbc:mysql://us-cdbr-east-02.cleardb.com/heroku_ccea1cf4896460c?user=b5a529b56bb57f&password=f2643e0f");
-                    sta = cnx.createStatement();
-                    rs = sta.executeQuery("select max(idUsuario)+1 from usuario");
-
-                    String idUsuario = "";
-                    while (rs.next()) {
-                        idUsuario = rs.getString(1);
+            <%
+                        }
+                    } catch (Exception e) {
+                        out.println("Something went wrong !! Please try again" + e);
                     }
-
-                    sta.executeUpdate("insert into usuario values('" + idUsuario + "','" + nom + "', '" + paterno + "', '" + materno + "', '" + email + "', '" + alias + "', '" + pass + "')");
-                    request.getRequestDispatcher("logIn.jsp").forward(request, response);
-                    sta.close();
-                    rs.close();
-                    cnx.close();
-
-                } catch (Exception e) {
-                    out.print("Fallo" + e);
                 }
-            }
-        %>
+            %>
+        </section>
+
+
 
     </body>
     <script src="Recursos/js/jquery.js"></script>

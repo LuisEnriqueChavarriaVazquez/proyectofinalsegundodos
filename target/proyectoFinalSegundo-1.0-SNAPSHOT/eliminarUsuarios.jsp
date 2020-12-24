@@ -16,7 +16,7 @@
 
     try {
         Class.forName("com.mysql.jdbc.Driver");
-        cnx = DriverManager.getConnection("jdbc:mysql://us-cdbr-east-02.cleardb.com/heroku_ccea1cf4896460c?user=b5a529b56bb57f&password=f2643e0f");
+        cnx = DriverManager.getConnection("jdbc:mysql://localhost/nuevaFotoBase?user=root&password=root");
         sta = cnx.createStatement();
         sta.executeUpdate("delete from usuario where idUsuario = '"+cod+"'");
         request.getRequestDispatcher("despliegueUsuarios.jsp").forward(request,response);
